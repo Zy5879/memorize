@@ -11,10 +11,17 @@ import SwiftUI
 
 struct ContentView: View {
     let emojis: Array<String> = ["👻","🎃","🕷️","😈","💀", "👽","👺","🥷🏿","🤡"]
+    
+    @State var newEmojis: Array<String> = []
+    
+    
     @State var cardCount: Int = 4
     
     var body: some View {
         VStack {
+            Text("Memorize!")
+                .font(.largeTitle)
+                .bold()
             ScrollView {
                 cards
             }
@@ -27,8 +34,8 @@ struct ContentView: View {
     
     var cards: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
-            ForEach(0..<cardCount, id: \.self) { index in
-                CardView(content: emojis[index])
+            ForEach(0..<newEmojis.count, id: \.self) { index in
+                CardView(content: newEmojis[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
@@ -37,12 +44,15 @@ struct ContentView: View {
     
     var cardCountAdjusters: some View {
         HStack {
-            cardAdder
             Spacer()
-            cardRemover
+            themeAdjuster(of: "car", symbol: "car.side.fill")
+            Spacer()
+            themeAdjuster(of: "halloween", symbol: "theatermasks.fill")
+            Spacer()
+
         }
         .imageScale(.large)
-        .font(.largeTitle)
+//        .font(.largeTitle)
     }
     
     
@@ -55,6 +65,27 @@ struct ContentView: View {
         .disabled(cardCount + offSet < 1 || cardCount + offSet > emojis.count)
     }
     
+    func themeAdjuster(of theme: String, symbol: String) -> some View {
+        VStack {
+            Button(action: {
+                if theme == "car" {
+                    newEmojis = ["🚗","🚎","🚔","🏍️","🚕","🚙","🚌","🚎","🏎️", "🚓","🚑","🚒","🚐","🛻","🚚","🚛","🚜","🚘","🚖"]
+                    return newEmojis.shuffle()
+                } else if theme == "halloween" {
+                    newEmojis = ["👻","🎃","🕷️","😈","💀", "👽","👺","🥷🏿","🤡"]
+                    return newEmojis.shuffle()
+                }
+            }, label: {
+                Image(systemName: symbol)
+            })
+            Text(theme)
+        }
+       
+    }
+    
+    var carTheme: some View {
+        themeAdjuster(of: "car", symbol:"car.side")
+    }
     
     
     var cardAdder: some View {
