@@ -5,4 +5,8 @@
 //  Created by Zaire McAllister on 9/26/23.
 //
 
-import Foundation
+import SwiftUI
+
+class EmojiMemoryGame {
+    var model: MemoryGame<String>
+}
